@@ -266,27 +266,33 @@ class DragableEmotion extends StatefulWidget {
 }
 
 class _DragableEmotionState extends State<DragableEmotion> {
+  late Color _randomColor;
+
+  @override
+  void initState() {
+    super.initState();
+    List<Color> colors = [
+      Colors.red,
+      Colors.blue,
+      Colors.green,
+      Colors.purple,
+      Colors.yellow,
+      Colors.orange,
+      Colors.pink
+    ];
+    Random random = Random();
+    int randColorIdx = random.nextInt(colors.length);
+    _randomColor = colors[randColorIdx];
+    print('Random Color ${_randomColor.toString()}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
       top: widget.top,
       left: widget.left,
       child: Draggable(
-        child: Column(
-          children: [
-            SvgPicture.asset(
-              'assets/heart.svg',
-              colorFilter: ColorFilter.mode(
-                Colors.red, // Change this to your desired color
-                BlendMode.srcIn, // This mode applies the color to the SVG
-              ),
-              width: 40,
-              height: 40,
-            ),
-            Text(widget.name),
-          ],
-        ),
-        feedback: Column(
+          feedback: Column(
           children: [
             SvgPicture.asset(
               'assets/heart.svg',
@@ -300,6 +306,21 @@ class _DragableEmotionState extends State<DragableEmotion> {
         onDraggableCanceled: (velocity, offset) {
           widget.draggedAction(offset,widget.name,widget.offsetY);
         },
+        child: Column(
+          children: [
+            SvgPicture.asset(
+              'assets/heart.svg',
+              colorFilter: ColorFilter.mode(
+                _randomColor, // Change this to your desired color
+                BlendMode.srcIn, // This mode applies the color to the SVG
+              ),
+              width: 40,
+              height: 40,
+            ),
+            Text(widget.name),
+          ],
+        ),
+
       ),
     );
   }
